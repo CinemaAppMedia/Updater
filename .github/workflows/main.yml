@@ -1,0 +1,25 @@
+name: Updater
+on:
+  workflow_dispatch:
+jobs:
+  Updater:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone
+        run: git clone https://github.com/CinemaAppMedia/Cinema
+      - name: Update
+        run: |
+          chmod +x tmdb
+          cd Cinema
+          ../tmdb
+      - name: Git Push
+        run: |
+          cd Cinema
+          git config user.name CinemaAppMedia
+          git config user.email CinemaAppMedia@outlook.com
+          git config --global credential.helper store
+          echo "https://x-access-token:${{secrets.TOKEN}}@github.com" > ~/.git-credentials
+          git add .
+          git commit -m "Update"
+          git push
